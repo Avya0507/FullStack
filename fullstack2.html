@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Colorful Banking Interface</title>
+
+<style>
+:root{
+    --primary:#6a11cb;
+    --secondary:#25c3fc;
+    --success:#00c853;
+    --danger:#ff1744;
+}
+
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg, var(--primary), var(--secondary));
+}
+
+.bank-box{
+    background:#ffffff;
+    padding:30px 40px;
+    width:360px;
+    border-radius:20px;
+    box-shadow:0 18px 40px rgba(0,0,0,0.35);
+    display:flex;
+    flex-direction:column;
+    gap:18px;
+    animation:fadeIn 0.8s ease;
+}
+
+@keyframes fadeIn{
+    from{opacity:0; transform:translateY(20px);} 
+    to{opacity:1; transform:translateY(0);} 
+}
+
+.balance{
+    background:linear-gradient(135deg, #00c853, #64dd17);
+    color:white;
+    padding:18px;
+    text-align:center;
+    font-size:24px;
+    border-radius:14px;
+    font-weight:600;
+    letter-spacing:0.5px;
+}
+
+input{
+    padding:13px;
+    font-size:17px;
+    width:100%;
+    border-radius:10px;
+    border:1px solid #ccc;
+    transition:0.3s;
+}
+
+input:focus{
+    outline:none;
+    border-color:var(--secondary);
+    box-shadow:0 0 0 3px rgba(37, 170, 252, 0);
+}
+
+.btn-group{
+    display:flex;
+    gap:14px;
+}
+
+button{
+    flex:1;
+    padding:14px;
+    font-size:18px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    color:white;
+    font-weight:600;
+    transition:transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 10px 22px rgba(0,0,0,0.25);
+}
+
+.deposit{
+    background:linear-gradient(135deg, #1de9b6, #00bfa5);
+}
+
+.withdraw{
+    background:linear-gradient(135deg, #ff5252, #ff1744);
+}
+
+#message{
+    text-align:center;
+    font-weight:600;
+    font-size:16px;
+    min-height:20px;
+}
+
+@media(max-width:420px){
+    .bank-box{
+        width:92%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="bank-box">
+
+    <div class="balance">
+        Balance: ₹<span id="balance">1000</span>
+    </div>
+
+    <input type="number" id="amount" placeholder="Enter amount">
+
+    <div class="btn-group">
+        <button class="deposit" onclick="deposit()">Deposit</button>
+        <button class="withdraw" onclick="withdraw()">Withdraw</button>
+    </div>
+
+    <div id="message"></div>
+
+</div>
+
+<script>
+let currentBalance = 1000;
+
+function deposit(){
+    let amt = Number(document.getElementById("amount").value);
+    let msg = document.getElementById("message");
+
+    if(amt <= 0){
+        msg.style.color = "var(--danger)";
+        msg.innerText = "❌ Enter a valid amount";
+        return;
+    }
+
+    currentBalance += amt;
+    document.getElementById("balance").innerText = currentBalance;
+    msg.style.color = "var(--success)";
+    msg.innerText = "✅ Amount deposited successfully";
+}
+
+function withdraw(){
+    let amt = Number(document.getElementById("amount").value);
+    let msg = document.getElementById("message");
+
+    if(amt <= 0){
+        msg.style.color = "var(--danger)";
+        msg.innerText = "❌ Enter a valid amount";
+        return;
+    }
+
+    if(amt > currentBalance){
+        msg.style.color = "var(--danger)";
+        msg.innerText = "⚠️ Insufficient balance";
+        return;
+    }
+
+    currentBalance -= amt;
+    document.getElementById("balance").innerText = currentBalance;
+    msg.style.color = "var(--success)";
+    msg.innerText = "✅ Amount withdrawn successfully";
+}
+</script>
+
+</body>
+</html>

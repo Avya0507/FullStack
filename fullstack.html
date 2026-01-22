@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Student Registration</title>
+
+<style>
+:root{
+    --primary:#6a5acd;   /* slate blue */
+    --secondary:#ff7a18; /* orange */
+    --accent:#00c9a7;    /* teal */
+}
+
+*{
+    box-sizing:border-box;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body{
+    margin:0;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    background:linear-gradient(135deg, var(--primary), var(--accent));
+}
+
+.box{
+    width:380px;
+    background:#fff;
+    padding:35px 45px;
+    border-radius:18px;
+    box-shadow:0 15px 35px rgba(0,0,0,0.25);
+    position:relative;
+    overflow:hidden;
+}
+
+.box::before{
+    content:"";
+    position:absolute;
+    top:-60px;
+    right:-60px;
+    width:140px;
+    height:140px;
+    background:radial-gradient(circle, var(--secondary), transparent 70%);
+}
+
+h2{
+    margin-bottom:25px;
+    color:var(--primary);
+    text-align:center;
+    letter-spacing:1px;
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    font-weight:600;
+    color:#333;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin-top:6px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    font-size:16px;
+    transition:0.3s;
+}
+
+input:focus{
+    outline:none;
+    border-color:var(--primary);
+    box-shadow:0 0 0 3px rgba(106,90,205,0.2);
+}
+
+small{
+    display:block;
+    margin-top:4px;
+    font-size:13px;
+    color:#777;
+}
+
+button{
+    width:100%;
+    margin-top:25px;
+    padding:14px;
+    font-size:18px;
+    font-weight:600;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    color:#fff;
+    background:linear-gradient(135deg, var(--primary), var(--secondary));
+    transition:transform 0.2s, box-shadow 0.2s;
+}
+
+button:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 18px rgba(0,0,0,0.25);
+}
+
+#success{
+    margin-top:18px;
+    text-align:center;
+    font-weight:bold;
+    color:var(--accent);
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<form id="regForm">
+<h2>Student Registration</h2>
+
+<label>Student ID</label>
+<input type="text" required pattern="[A-Za-z0-9]{5,10}" />
+<small>5–10 alphanumeric characters</small>
+
+<label>Full Name</label>
+<input type="text" required minlength="2" maxlength="50" pattern="[A-Za-z ]+" />
+<small>Only alphabets allowed</small>
+
+<label>Email Address</label>
+<input type="email" required />
+<small>Enter a valid email</small>
+
+<label>Age</label>
+<input type="number" min="16" max="30" required />
+<small>Age must be between 16 and 30</small>
+
+<button type="submit">Register Now</button>
+
+<p id="success"></p>
+</form>
+</div>
+
+<script>
+document.getElementById("regForm").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const msg = document.getElementById("success");
+    msg.innerText = "🎉 Registration Successful";
+
+    setTimeout(() => {
+        this.reset();
+        msg.innerText = "";
+    }, 2500);
+});
+</script>
+
+</body>
+</html>

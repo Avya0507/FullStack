@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dynamic Product Filter</title>
+
+<!-- React CDN -->
+<script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial, sans-serif;
+    background:linear-gradient(135deg,#43cea2,#185a9d);
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:30px;
+}
+
+/* Main Container */
+.app{
+    background:white;
+    width:100%;
+    max-width:1100px;
+    padding:25px;
+    border-radius:14px;
+    box-shadow:0 12px 30px rgba(0,0,0,0.25);
+}
+
+/* Header */
+.header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:20px;
+}
+
+.header h2{
+    margin:0;
+    color:#333;
+}
+
+/* Dropdown */
+select{
+    padding:10px 14px;
+    font-size:16px;
+    border-radius:6px;
+    border:1px solid #aaa;
+}
+
+/* Product Grid */
+.products{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+    gap:20px;
+}
+
+/* Product Card */
+.card{
+    background:#f9f9f9;
+    border-radius:10px;
+    padding:18px;
+    text-align:center;
+    box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    transition:transform 0.3s ease, opacity 0.3s ease;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+}
+
+.card h3{
+    margin:10px 0 5px;
+    color:#333;
+}
+
+.price{
+    font-size:18px;
+    font-weight:bold;
+    color:#2e7d32;
+}
+
+/* Responsive */
+@media(max-width:600px){
+    .header{
+        flex-direction:column;
+        gap:12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="root"></div>
+
+<script type="text/babel">
+function ProductFilter(){
+
+    const productsData = [
+        {id:1, name:"Laptop", category:"Electronics", price:65000},
+        {id:2, name:"Headphones", category:"Electronics", price:2500},
+        {id:3, name:"Shoes", category:"Fashion", price:3200},
+        {id:4, name:"Watch", category:"Fashion", price:5400},
+        {id:5, name:"Smartphone", category:"Electronics", price:48000},
+        {id:6, name:"Backpack", category:"Accessories", price:1800},
+    ];
+
+    const [filter, setFilter] = React.useState("All");
+
+    const filteredProducts =
+        filter === "All"
+        ? productsData
+        : productsData.filter(p => p.category === filter);
+
+    return(
+        <div className="app">
+
+            <div className="header">
+                <h2>Dynamic Product Filter</h2>
+
+                <select onChange={(e)=>setFilter(e.target.value)}>
+                    <option value="All">All Products</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Fashion">Fashion</option>
+                    <option value="Accessories">Accessories</option>
+                </select>
+            </div>
+
+            <div className="products">
+                {filteredProducts.map(product => (
+                    <div className="card" key={product.id}>
+                        <h3>{product.name}</h3>
+                        <p>{product.category}</p>
+                        <div className="price">
+                            ₹{product.price.toFixed(2)}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+        </div>
+    );
+}
+
+ReactDOM.createRoot(document.getElementById("root"))
+.render(<ProductFilter />);
+</script>
+
+</body>
+</html>
