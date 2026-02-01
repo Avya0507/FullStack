@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>SVG Drawing Tool</title>
+
+<style>
+    body {
+        margin: 0;
+        font-family: Arial;
+        background: #f2f2f2;
+    }
+
+    .toolbar {
+        background: #222;
+        color: white;
+        padding: 10px;
+        display: flex;
+        gap: 20px;
+        align-items: center;
+    }
+
+    svg {
+        width: 100vw;
+        height: 90vh;
+        background: white;
+        display: block;
+        cursor: crosshair;
+    }
+
+    button {
+        padding: 5px 12px;
+        cursor: pointer;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="toolbar">
+    <label>Color:</label>
+    <input type="color" id="colorPicker" value="#0000ff">
+
+    <button onclick="undo()">Undo</button>
+
+    <strong>Circles Drawn: <span id="count">0</span></strong>
+</div>
+
+<svg id="svgCanvas"></svg>
+
+<script>
+    const svg = document.getElementById("svgCanvas");
+    const colorPicker = document.getElementById("colorPicker");
+    const countDisplay = document.getElementById("count");
+
+    let isDrawing = false;
+    let startPoint = null;
+    let currentCircle = null;
+    let circles = []; // stores all circles
+
+    // Convert mouse coordinates to SVG coordinates
+    function getSVGPoint(event) {
+        let pt = svg.createSVGPoint();
+        pt.x = event.clientX;
+        pt.y = event.clientY;
+        return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    // Mouse down -> start drawing circle
+    svg.addEventListener("mousedown", (e) => {
+        isDrawing = true;
+        startPoint = getSVGPoint(e);
+
+        currentCircle = document.createElementNS(
+            "http://www.w3.org/2000/svg", "circle"
+        );
+
+        currentCircle.setAttribute("cx", startPoint.x);
+        currentCircle.setAttribute("cy", startPoint.y);
+        currentCircle.setAttribute("r", 1);
+        currentCircle.setAttribute("stroke", colorPicker.value);
+        currentCircle.setAttribute("stroke-width", 2);
+        currentCircle.setAttribute("fill", "none");
+
+        svg.appendChild(currentCircle);
+        circles.push(currentCircle);
+        updateCount();
+    });
+
+    // Mouse move -> resize circle
+    svg.addEventListener("mousemove", (e) => {
+        if (!isDrawing) return;
+
+        let point = getSVGPoint(e);
+        let dx = point.x - startPoint.x;
+        let dy = point.y - startPoint.y;
+        let radius = Math.sqrt(dx * dx + dy * dy);
+
+        currentCircle.setAttribute("r", radius);
+    });
+
+    // Mouse up -> stop drawing
+    svg.addEventListener("mouseup", () => {
+        isDrawing = false;
+    });
+
+    svg.addEventListener("mouseleave", () => {
+        isDrawing = false;
+    });
+
+    // Undo function
+    function undo() {
+        if (circles.length > 0) {
+            let lastCircle = circles.pop();
+            svg.removeChild(lastCircle);
+            updateCount();
+        }
+    }
+
+    // Update counter display
+    function updateCount() {
+        countDisplay.textContent = circles.length;
+    }
+</script>
+
+</body>
+</html>
