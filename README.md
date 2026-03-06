@@ -71,3 +71,4 @@ export default defineConfig([
   },
 ])
 ```
+Updated for Render deployment
